@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix Me 💔</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-particles" id="particles"></div>
+  <div class="container" id="container">
+    <!-- Sad State -->
+    <div class="face-wrapper" id="sadState">
+      <div class="face sad-face" id="sadFace">
+        <div class="eye left-eye">
+          <div class="pupil"></div>
+          <div class="tear"></div>
+        </div>
+        <div class="eye right-eye">
+          <div class="pupil"></div>
+          <div class="tear"></div>
+        </div>
+        <div class="mouth sad-mouth"></div>
+        <div class="blush left-blush"></div>
+        <div class="blush right-blush"></div>
+      </div>
+      <p class="subtitle sad-subtitle">I'm feeling broken...</p>
+      <button class="fix-btn" id="fixBtn" onclick="fixMe()">
+        <span class="btn-icon">🩹</span>
+        <span class="btn-text">FIX</span>
+        <span class="btn-sparkle">✨</span>
+      </button>
+    </div>
+
+    <!-- Happy State -->
+    <div class="face-wrapper hidden" id="happyState">
+      <div class="face happy-face" id="happyFace">
+        <div class="eye left-eye happy-eye">
+          <div class="happy-pupil"></div>
+        </div>
+        <div class="eye right-eye happy-eye">
+          <div class="happy-pupil"></div>
+        </div>
+        <div class="mouth happy-mouth"></div>
+        <div class="blush left-blush happy-blush-anim"></div>
+        <div class="blush right-blush happy-blush-anim"></div>
+      </div>
+      <p class="subtitle happy-subtitle">I love you babe 💕</p>
+      <div class="hearts-container" id="heartsContainer"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

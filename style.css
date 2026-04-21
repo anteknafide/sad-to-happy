@@ -1,0 +1,482 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --sad-bg: #1a1a2e;
+  --sad-face: #fdd835;
+  --happy-bg: #fce4ec;
+  --happy-face: #ffeb3b;
+  --tear-color: #64b5f6;
+  --blush: #ef9a9a;
+  --btn-pink: #ec407a;
+  --btn-pink-hover: #f06292;
+  --heart-colors: #e91e63, #f06292, #ec407a, #ff80ab, #f48fb1;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sad-bg);
+  overflow: hidden;
+  transition: background 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.happy-mode {
+  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 40%, #f48fb1 100%);
+}
+
+/* ===== Background Particles ===== */
+.bg-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  animation: float-particle linear infinite;
+}
+
+@keyframes float-particle {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ===== Container ===== */
+.container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.face-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.face-wrapper.hidden {
+  display: none;
+}
+
+.face-wrapper.fade-out {
+  opacity: 0;
+  transform: scale(0.8) rotate(-10deg);
+}
+
+.face-wrapper.fade-in {
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.3) rotate(15deg); }
+  60% { transform: scale(1.1) rotate(-3deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* ===== Face ===== */
+.face {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 -6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sad-face {
+  background: linear-gradient(145deg, #fdd835 0%, #f9a825 100%);
+  animation: sadBob 3s ease-in-out infinite;
+}
+
+.happy-face {
+  background: linear-gradient(145deg, #ffeb3b 0%, #fdd835 100%);
+  animation: happyBounce 1.5s ease-in-out infinite;
+  box-shadow: 0 10px 40px rgba(255, 183, 77, 0.4), inset 0 -6px 12px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes sadBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes happyBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(-2deg); }
+  75% { transform: translateY(-5px) rotate(2deg); }
+}
+
+/* ===== Eyes ===== */
+.eye {
+  width: 28px;
+  height: 32px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.left-eye { left: 50px; }
+.right-eye { right: 50px; }
+
+.pupil {
+  width: 14px;
+  height: 14px;
+  background: #333;
+  border-radius: 50%;
+  position: relative;
+  animation: lookAround 4s ease-in-out infinite;
+}
+
+.pupil::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+@keyframes lookAround {
+  0%, 100% { transform: translate(0, 2px); }
+  25% { transform: translate(-3px, 4px); }
+  50% { transform: translate(2px, 3px); }
+  75% { transform: translate(-1px, 5px); }
+}
+
+/* Happy eyes */
+.happy-eye {
+  height: 10px;
+  border-radius: 20px 20px 0 0;
+  background: #333;
+  overflow: hidden;
+  top: 62px;
+}
+
+.happy-eye .happy-pupil {
+  display: none;
+}
+
+/* ===== Tears ===== */
+.tear {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 12px;
+  background: var(--tear-color);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  opacity: 0;
+  animation: tearDrop 2.5s ease-in infinite;
+}
+
+.left-eye .tear { animation-delay: 0s; }
+.right-eye .tear { animation-delay: 1.2s; }
+
+@keyframes tearDrop {
+  0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.5); }
+  20% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(60px) scale(0.3); }
+}
+
+/* ===== Mouth ===== */
+.mouth {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.sad-mouth {
+  bottom: 40px;
+  width: 40px;
+  height: 20px;
+  border: 4px solid #bf360c;
+  border-top: none;
+  border-radius: 0 0 40px 40px;
+  transform: translateX(-50%) scaleY(-1);
+  animation: sadMouthWobble 3s ease-in-out infinite;
+}
+
+@keyframes sadMouthWobble {
+  0%, 100% { width: 40px; }
+  50% { width: 36px; }
+}
+
+.happy-mouth {
+  bottom: 35px;
+  width: 50px;
+  height: 25px;
+  border: 4px solid #bf360c;
+  border-top: none;
+  border-radius: 0 0 40px 40px;
+  animation: happyMouthPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes happyMouthPulse {
+  0%, 100% { width: 50px; height: 25px; }
+  50% { width: 55px; height: 28px; }
+}
+
+/* ===== Blush ===== */
+.blush {
+  width: 24px;
+  height: 14px;
+  background: var(--blush);
+  border-radius: 50%;
+  position: absolute;
+  top: 95px;
+  opacity: 0.5;
+}
+
+.left-blush { left: 28px; }
+.right-blush { right: 28px; }
+
+.happy-blush-anim {
+  opacity: 0.7;
+  animation: blushPulse 2s ease-in-out infinite;
+}
+
+@keyframes blushPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+
+/* ===== Subtitle ===== */
+.subtitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.sad-subtitle {
+  color: #90a4ae;
+  animation: textFade 3s ease-in-out infinite;
+}
+
+@keyframes textFade {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.happy-subtitle {
+  color: #ad1457;
+  font-size: 2rem;
+  font-weight: 800;
+  animation: loveText 1.5s ease-in-out infinite;
+  text-shadow: 0 2px 10px rgba(233, 30, 99, 0.3);
+}
+
+@keyframes loveText {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* ===== FIX Button ===== */
+.fix-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 42px;
+  background: linear-gradient(135deg, var(--btn-pink) 0%, #d81b60 100%);
+  color: white;
+  border: none;
+  border-radius: 60px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(236, 64, 122, 0.45), 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: btnPulse 2s ease-in-out infinite;
+}
+
+.fix-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 36px rgba(236, 64, 122, 0.55), 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, var(--btn-pink-hover) 0%, #ec407a 100%);
+}
+
+.fix-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+@keyframes btnPulse {
+  0%, 100% { box-shadow: 0 6px 24px rgba(236, 64, 122, 0.45); }
+  50% { box-shadow: 0 6px 36px rgba(236, 64, 122, 0.7), 0 0 60px rgba(236, 64, 122, 0.2); }
+}
+
+.fix-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 60%
+  );
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.btn-icon {
+  font-size: 1.4rem;
+}
+
+.btn-sparkle {
+  font-size: 1.1rem;
+  animation: sparkleRotate 2s linear infinite;
+}
+
+@keyframes sparkleRotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.3); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ===== Floating Hearts ===== */
+.hearts-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.floating-heart {
+  position: absolute;
+  font-size: 1.5rem;
+  animation: floatHeart linear forwards;
+  opacity: 0;
+}
+
+@keyframes floatHeart {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0) rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-10vh) scale(1) rotate(15deg);
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-110vh) scale(0.5) rotate(360deg);
+  }
+}
+
+/* ===== Confetti burst ===== */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  animation: confettiFall linear forwards;
+  z-index: 15;
+  pointer-events: none;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg) scale(0.3);
+  }
+}
+
+/* ===== Falling Love Text ===== */
+.falling-text {
+  position: fixed;
+  white-space: nowrap;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: #e91e63;
+  pointer-events: none;
+  z-index: 12;
+  opacity: 0;
+  text-shadow: 0 0 10px rgba(233, 30, 99, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fallDown linear forwards;
+}
+
+@keyframes fallDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) rotate(0deg) scale(0.5);
+  }
+  8% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  85% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(110vh) rotate(var(--rotate-end, 25deg)) scale(0.6);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .face {
+    width: 140px;
+    height: 140px;
+  }
+
+  .eye { top: 42px; width: 22px; height: 26px; }
+  .left-eye { left: 38px; }
+  .right-eye { right: 38px; }
+  .pupil { width: 11px; height: 11px; }
+
+  .sad-mouth { bottom: 30px; width: 32px; height: 16px; }
+  .happy-mouth { bottom: 28px; width: 40px; height: 20px; }
+
+  .blush { top: 72px; width: 18px; height: 10px; }
+  .left-blush { left: 22px; }
+  .right-blush { right: 22px; }
+
+  .happy-eye { top: 48px; }
+
+  .subtitle { font-size: 1.1rem; }
+  .happy-subtitle { font-size: 1.6rem; }
+
+  .fix-btn { padding: 14px 34px; font-size: 1.05rem; }
+}
